@@ -11,7 +11,12 @@ const Title = (props) => {
 const StatisticLine = (props) => {
   return (
     <>
-      <p>{props.text} {props.value} {props.unit} </p>
+      <tr>
+        <td>{props.text}</td>
+        <td>{props.value}</td>
+        <td>{props.unit}</td>
+      </tr>
+     
     </>
   )
 }
@@ -28,12 +33,14 @@ const Statistics = (props) => {
   } else {
     return (
       <>
-        <StatisticLine text= "good" value= {props.good} />
-        <StatisticLine text= "neutral" value= {props.neutral} />
-        <StatisticLine text= "bad" value= {props.bad} />
-        <StatisticLine text= "all" value= {props.all} />
-        <StatisticLine text= "average" value= {props.average} />
-        <StatisticLine text= "positive" value= {props.positive} unit="%" />
+        <table>
+          <StatisticLine text= "good" value= {props.good} />
+          <StatisticLine text= "neutral" value= {props.neutral} />
+          <StatisticLine text= "bad" value= {props.bad} />
+          <StatisticLine text= "all" value= {props.all} />
+          <StatisticLine text= "average" value= {props.average} />
+          <StatisticLine text= "positive" value= {props.positive} unit="%" />
+        </table>
       </>
     )
   }
@@ -88,7 +95,7 @@ const App = () => {
 
       <Title title = {title2} />
 
-      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive} />
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average.toFixed(1)} positive={positive.toFixed(1)} />
 
     </div>
   )
