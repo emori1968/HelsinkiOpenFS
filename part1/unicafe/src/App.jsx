@@ -11,7 +11,7 @@ const Title = (props) => {
 const Displaystats = (props) => {
   return (
     <>
-      <p>{props.eval} {props.count} </p>
+      <p>{props.eval} {props.res} {props.unit} </p>
     </>
   )
 }
@@ -34,6 +34,10 @@ const App = () => {
   // variables
   const title1 = "give feedback"
   const title2 = "statistics"
+  var all = good + neutral + bad
+  var average = (good - bad)/ all
+  var positive = good / all
+
 
   const increaseGood = () => setGood(good + 1)
   const increaseNeutral = () => setNeutral(neutral + 1)
@@ -60,15 +64,28 @@ const App = () => {
 
       <Displaystats 
         eval = 'good'
-        count = {good}
+        res = {good}
       />
       <Displaystats 
         eval = 'neutral'
-        count = {neutral}
+        res = {neutral}
       />
       <Displaystats 
         eval = 'bad'
-        count = {bad}
+        res = {bad}
+      />
+      <Displaystats 
+        eval = 'all'
+        res = {all}
+      />
+      <Displaystats 
+        eval = 'average'
+        res = {average}
+      />
+      <Displaystats 
+        eval = 'positive'
+        res = {positive}
+        unit = "%"
       />
 
     </div>
