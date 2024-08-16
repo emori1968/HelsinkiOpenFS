@@ -8,13 +8,38 @@ const Title = (props) => {
   )
 }
 
-const Displaystats = (props) => {
+const StatisticLine = (props) => {
   return (
     <>
-      <p>{props.eval} {props.res} {props.unit} </p>
+      <p>{props.text} {props.value} {props.unit} </p>
     </>
   )
 }
+
+const Statistics = (props) => {
+
+  if (props.all==0) {
+    return (
+      <>
+         <p>No feedback given</p>
+      </>
+    )
+   
+  } else {
+    return (
+      <>
+        <StatisticLine text= "good" value= {props.good} />
+        <StatisticLine text= "neutral" value= {props.neutral} />
+        <StatisticLine text= "bad" value= {props.bad} />
+        <StatisticLine text= "all" value= {props.all} />
+        <StatisticLine text= "average" value= {props.average} />
+        <StatisticLine text= "positive" value= {props.positive} unit="%" />
+      </>
+    )
+  }
+}
+
+
 
 const Button = (props) => {
   console.log({props})
@@ -24,6 +49,7 @@ const Button = (props) => {
     </button>
   )
 }
+
 
 
 const App = () => {
@@ -62,31 +88,7 @@ const App = () => {
 
       <Title title = {title2} />
 
-      <Displaystats 
-        eval = 'good'
-        res = {good}
-      />
-      <Displaystats 
-        eval = 'neutral'
-        res = {neutral}
-      />
-      <Displaystats 
-        eval = 'bad'
-        res = {bad}
-      />
-      <Displaystats 
-        eval = 'all'
-        res = {all}
-      />
-      <Displaystats 
-        eval = 'average'
-        res = {average}
-      />
-      <Displaystats 
-        eval = 'positive'
-        res = {positive}
-        unit = "%"
-      />
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive} />
 
     </div>
   )
