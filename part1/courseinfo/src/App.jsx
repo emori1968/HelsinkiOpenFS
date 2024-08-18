@@ -10,10 +10,7 @@ const Parts = (props) =>  {
   }
 const Totals = (props) => {
   let array = props.parts.map(row => row.exercises)
-  let total = 0
-  for(let i=0; i< array.length; i++) {
-    total += array[i]
-  } 
+  const total = array.reduce((a,b) => a+b,0)
   console.log(array, total)
 
   return (
