@@ -70,20 +70,24 @@ const App = () => {
   console.log('render', persons.length, 'persons')
 
 
+
+
   const addPerson = (event) => {
     event.preventDefault()
     console.log('botton clicked', event.target)
-    // person is and Object {name: "Eduardo"}
+    // person is and Object
     const personObject = {
       name: newName,
       number: newNumber,
       id: persons.length +1,
     }
-    // now new person can be added to the list
-    setPersons(persons.concat(personObject))
-    // reset previos value
-    setNewName('')
-    setNewNumber('')
+    axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const handleNameChange = (event) => {
