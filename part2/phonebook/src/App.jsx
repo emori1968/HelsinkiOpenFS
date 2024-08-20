@@ -1,5 +1,55 @@
 import { useState } from 'react'
 
+
+const Filter = (props) => {
+  return (
+    <div>
+      filter shown with: <input value = {props.name} onChange= {props.handler} />
+    </div>
+  )
+}
+
+const PersonForm = (props) => {
+  // No name repeat check
+  if (props.newname != '') {
+    const isNew = props.listnames.find((person) => person.name == props.newname )
+    if ( isNew != undefined ) {
+      alert(`${props.newname} is already on the phonebook`);
+    }
+  }
+  return (
+    <>
+      <form onSubmit= {props.addperson}>
+        <div>
+          name: <input value = {props.newname} onChange= {props.handlenamechange}/>
+        </div>
+        <div>
+          number: <input value = {props. newnumber} onChange= {props. handlenumberchange}/>
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+    </>
+  )
+}
+
+const Persons = (props) => {
+  // filter person list 
+  const filteredlist =  (props.filtername != '')
+  ? props.persons.filter(row => row.name === props.filtername)
+  : props.persons
+  return (
+    <>
+      <ul>
+        {filteredlist.map(row => <p key={row.id}>{row.name} {row.number}</p>)}
+      </ul>
+    </>
+  )
+}
+
+
+
 const App = () => {
 
   const [persons, setPersons] = useState([
@@ -34,14 +84,6 @@ const App = () => {
     console.log(event.target.value)
     setNewName(event.target.value);
     }
-    
-  // No name repeat check. Not working well!!
-  if (newName != '') {
-    const isNew = persons.find((person) => person.name === newName )
-    if ( isNew != undefined ) {
-      alert(`${newName} is already on the phonebook`);
-    }
-  }
 
   const handleNumberChange = (event) => {
     console.log(event.target.value)
@@ -53,49 +95,24 @@ const App = () => {
     setFilterName(event.target.value)
   }
 
-  // filter person list 
-  const filteredlist =  (filterName != '')
-  ? persons.filter(row => row.name === filterName)
-  : persons
-
-
-  
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-          filter shown with: <input
-                                value = {filterName}
-                                onChange= {handleFilterChange}
-                              />
-        </div>
-
-      <h2>add a new</h2>
-      <form onSubmit= {addPerson}>
-        <div>
-          name: <input
-                   value = {newName}
-                   onChange= {handleNameChange}
-                />
-        </div>
-        <div>
-          number: <input
-                   value = {newNumber}
-                   onChange= {handleNumberChange}
-                />
-        </div>
-
-
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {filteredlist.map(row => <p key={row.id}>{row.name} {row.number}</p>)}
-      </ul>
+      <Filter name = {filterName} handler= {handleFilterChange}/>
+      <h3>Add a new</h3>
+      <PersonForm
+        listnames = {persons}
+        addperson = {addPerson}
+        newname = {newName}
+        handlenamechange = {handleNameChange}
+        newnumber = {newNumber}
+        handlenumberchange = {handleNumberChange}      
+      />
+      <h3>Numbers</h3>
+      <Persons persons= {persons} filtername={filterName}/>
     </div>
   )
-}
+
+  }
 
 export default App
