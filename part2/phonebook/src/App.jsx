@@ -12,45 +12,27 @@ const Filter = (props) => {
 }
 
 const PersonForm = (props) => {
-  // No name repeat check
-  if (props.newname != '') {
-    const isNew = props.listnames.find((person) => person.name == props.newname )
-    if ( isNew != undefined ) {
-      alert(`${props.newname} is already on the phonebook`);
-    }
-  }
   return (
     <>
       <form onSubmit= {props.addperson}>
-        <div>
-          name: <input value = {props.newname} onChange= {props.handlenamechange}/>
-        </div>
-        <div>
-          number: <input value = {props. newnumber} onChange= {props. handlenumberchange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
+        <div>name: <input value = {props.newname} onChange= {props.handlenamechange}/> </div>
+        <div>number: <input value = {props. newnumber} onChange= {props. handlenumberchange}/> </div>
+        <button type="submit">add</button>
       </form>
     </>
   )
 }
 
 const Persons = (props) => {
-  // filter person list 
-  const filteredlist =  (props.filtername != '')
-  ? props.persons.filter(row => row.name === props.filtername)
-  : props.persons
   return (
     <>
       <ul>
-        {filteredlist.map(row => <p key={row.id}>{row.name} {row.number}</p>)}
+        {props.showList.map(row => <p key={row.id}> {row.name} {row.number}
+        <button onClick={() => props.deletePerson(row.id)}>delete</button></p>)}
       </ul>
     </>
   )
 }
-
-
 
 const App = () => {
 
@@ -67,12 +49,9 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, [])
-  console.log('render', persons.length, 'persons')
 
   const addPerson = (event) => {
     event.preventDefault()
-    console.log('botton clicked', event.target)
-    // person is and Object
     const personObject = {
       name: newName,
       number: newNumber,
@@ -84,7 +63,8 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-  }
+  } 
+  
 
   const handleNameChange = (event) => {
     console.log(event.target.value)
@@ -97,8 +77,34 @@ const App = () => {
     }
 
   const handleFilterChange = (event) => {
-    console.log(filterName)
+    console.log(event.target.value)
     setFilterName(event.target.value)
+  }
+
+   // No name repeat check
+   if (newName != '') {
+    const isNew = persons.find((person) => person.name == newName )
+    if ( isNew != undefined ) alert(`${newName} is already on the phonebook`);
+    }
+
+  // filter person list 
+  const filteredList =  (filterName != '')
+  ? persons.filter(row => row.name === filterName)
+  : persons
+
+  const deletePersonOf = (id) => {
+    const person = persons.find(n => n.id === id)
+    console.log(person)
+    const yn = window.confirm(`Delete ${person.name}?}`)
+    if (yn) {
+      personService
+      .delperson(id)
+      .then(setPersons(persons.filter(n => n.id !== id)))
+      .catch(error => {
+        alert(`the person ${person.name} was already deleted from server`)
+        setPersons(persons.filter(n => n.id !== id))
+      })
+    }
   }
 
   return (
@@ -107,15 +113,14 @@ const App = () => {
       <Filter name = {filterName} handler= {handleFilterChange}/>
       <h3>Add a new</h3>
       <PersonForm
-        listnames = {persons}
         addperson = {addPerson}
-        newname = {newName}
         handlenamechange = {handleNameChange}
+        newname = {newName}
         newnumber = {newNumber}
         handlenumberchange = {handleNumberChange}      
       />
       <h3>Numbers</h3>
-      <Persons persons= {persons} filtername={filterName}/>
+      <Persons showList={filteredList} deletePerson = {deletePersonOf}/>
     </div>
   )
 
