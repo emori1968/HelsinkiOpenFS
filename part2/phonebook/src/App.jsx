@@ -2,6 +2,17 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="confirm">
+      {message}
+    </div>
+  )
+}
+
 
 const Filter = (props) => {
   return (
@@ -40,6 +51,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const  [newNumber,setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [confirmMessage, setConfirmMessage] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -63,6 +75,8 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      setConfirmMessage(`Added ${newName}`)
+      setTimeout(() => {setConfirmMessage(null)}, 5000)
   } 
   
 
@@ -110,6 +124,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={confirmMessage} />
       <Filter name = {filterName} handler= {handleFilterChange}/>
       <h3>Add a new</h3>
       <PersonForm
