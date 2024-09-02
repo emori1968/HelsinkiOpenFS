@@ -1,5 +1,15 @@
+// HTTP GET,POST DELETE uing Axios midleware
+// baseURL backend root folder is in fullstack/part3
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/persons'
+
+// baseUrl for full stack build (in case of running with backend no need to declare url)
+// const baseUrl = '/api/persons'
+
+
+// for local development and test use:
+const baseUrl = 'http://localhost:3001/api/persons'
+
+// return data to reuests
 
 const getAll = () => {
   const request = axios.get(baseUrl)

@@ -13,7 +13,6 @@ const Notification = ({ message }) => {
   )
 }
 
-
 const Filter = (props) => {
   return (
     <div>
@@ -62,24 +61,51 @@ const App = () => {
       })
   }, [])
 
+  // filter person list 
+  const filteredList =  (filterName != '')
+  ? persons.filter(row => row.name === filterName)
+  : persons
+
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
       name: newName,
       number: newNumber,
     }
-    personService
+
+
+    const  newPerson = persons.filter( (p) => p.name === newName )
+    if ( newPerson.length != 0 ) { 
+      alert(`${newName} is already on the phonebook, number will be updated`)
+      personService
+      // only first person with same name is updated
+      .update(newPerson[0].id, personObject)
+      setConfirmMessage(`${newName} was updated`)
+      setTimeout(() => {setConfirmMessage(null)}, 5000)
+      setNewName('')
+      setNewNumber('')
+      }
+
+     else {
+
+      personService
       .create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
       })
+      .catch(error => {
+        setConfirmMessage(error.response.data.error);
+        setNewName('');
+        setNewNumber('')
+      })
       setConfirmMessage(`Added ${newName}`)
       setTimeout(() => {setConfirmMessage(null)}, 5000)
+     }
+
   } 
   
-
   const handleNameChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value);
@@ -95,16 +121,7 @@ const App = () => {
     setFilterName(event.target.value)
   }
 
-   // No name repeat check
-   if (newName != '') {
-    const isNew = persons.find((person) => person.name == newName )
-    if ( isNew != undefined ) alert(`${newName} is already on the phonebook`);
-    }
-
-  // filter person list 
-  const filteredList =  (filterName != '')
-  ? persons.filter(row => row.name === filterName)
-  : persons
+  
 
   const deletePersonOf = (id) => {
     const person = persons.find(n => n.id === id)
