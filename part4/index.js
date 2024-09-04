@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 const cors = require('cors')
+app.use(cors())
+
 const mongoose = require('mongoose')
 
 // const app = require('./app') // la aplicación Express real
@@ -13,9 +16,13 @@ const Blog = require('./models/blog')
 
 mongoose.connect(config.MONGODB_URI)
 
-app.use(cors())
-app.use(express.json())
+// now routers are in controllers/blog modules
+const blogsRouter = require('./controllers/blogs')
 
+// here blogsRouter receive the path, router only connects from root  "/"   or "/id:"
+app.use('/api/blogs', blogsRouter)
+
+/*  No more necesary, the magic "use" method make it available from app. I think this is "una cagada"
 app.get('/api/blogs', (request, response) => {
   Blog
     .find({})
@@ -33,6 +40,8 @@ app.post('/api/blogs', (request, response) => {
       response.status(201).json(result)
     })
 })
+
+*/
 
 
 app.listen(config.PORT, () => {
