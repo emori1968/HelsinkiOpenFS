@@ -18,9 +18,16 @@ mongoose.connect(config.MONGODB_URI)
 
 // now routers are in controllers/blog modules
 const blogsRouter = require('./controllers/blogs')
+const { requestLogger } = require('./utils/middleware')
 
 // here blogsRouter receive the path, router only connects from root  "/"   or "/id:"
 app.use('/api/blogs', blogsRouter)
+
+//Adding middleware
+const middleware = require('./utils/middleware')
+app.use(middleware.requestLogger)
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
 /*  No more necesary, the magic "use" method make it available from app. I think this is "una cagada"
 app.get('/api/blogs', (request, response) => {
