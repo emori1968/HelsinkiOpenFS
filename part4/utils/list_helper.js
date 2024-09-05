@@ -10,9 +10,22 @@ function totalLikes(blogs) {
   return sumlikes
   }
 
+const favoriteBlog = (blogs) => {
+  let maxlikes = 0;
+  let favblog = [];
+  for(let i=0; i<blogs.length; i++) {
+    if (blogs[i].likes>maxlikes) {
+      favblog= [blogs[i]]
+      maxlikes= blogs[i].likes
+    }
+  };
+  return(favblog)
+  }
+
 module.exports = {
     dummy,
-    totalLikes
+    totalLikes,
+    favoriteBlog
   }
 
   
