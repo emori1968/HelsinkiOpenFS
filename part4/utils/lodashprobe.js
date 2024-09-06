@@ -67,11 +67,11 @@ const oneblog = [
 
   
   // Blogs by Author count
-  const blogs_by_author = lodash.countBy([], (blog) => blog.author)
+  const blogs_by_author = lodash.countBy(blogs, (blog) => blog.author)
   console.log("Blogs by Author: ", blogs_by_author)
   
   // Author with max Blogs count
-  const most_blogs_author = lodash.maxBy([], (blog) => blog.author)
+  const most_blogs_author = lodash.maxBy(blogs, (blog) => blog.author)
   console.log("Most Blogs Author: ", most_blogs_author)
 
   // Blogs quantity for author with most blogs
@@ -82,6 +82,18 @@ const oneblog = [
   // group by retorna una lista de todos los blogs por autor, no realiza agregado de datos
   const groupbyauthor = lodash.groupBy(blogs, (blog) => blog.author)
   console.log("GroupByAuthor:", groupbyauthor["Edsger W. Dijkstra"])
+
+  const likesbyauthor = Object.entries(groupbyauthor).map( (x) => {
+    return(
+    {author: x[0],
+    likes: x[1].reduce( (acc,blog)=> acc+blog.likes,0)})
+    })
+
+  // return a list of likes
+  // const likesbyauthor = Object.entries(groupbyauthor).map( (x) => x[1].reduce( (acc,blog)=> acc+blog.likes,0))
+  
+  console.log("Likes Results",likesbyauthor)
+
 
 
 // Agregate data for grouped data structure {'author': [{..},{..},{..}]}
@@ -98,4 +110,24 @@ const oneblog = [
   // Author with more likes
   const most_likes_author = lodash.maxBy(summaryblogs, (blog) => blog.likes)
   console.log("Most Likes Author: ", most_likes_author)
+
+
   
+const mostL = (blogs) => {
+  const grouped = lodash.groupBy(blogs, (blog) => blog.author);
+  const agregated = Object.entries(grouped).map( (x) => {
+    return(
+    {author: x[0],
+    likes: x[1].reduce( (acc,blog)=> acc+blog.likes,0)})
+    })
+  const most_likes_author = lodash.maxBy(agregated, (blog) => blog.likes);
+  if(most_likes_author) {
+    return(most_likes_author)
+  } else {
+    return({author:"", likes:0})
+  }
+}
+
+console.log("Final: ", mostL([]))
+
+
