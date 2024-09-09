@@ -42,12 +42,19 @@ blogsRouter.post('/', (request, response, next) => {
     likes: likes
   })
 
-  blog.save()
+  if (body.title != undefined && body.url != undefined) {
+    blog.save()
     .then(savedBlog => {
       response.status(201).json(savedBlog)
     })
     .catch(error => next(error))
-})
+  } else {
+    response.status(400).end()
+  }
+
+  })
+
+  
 
 blogsRouter.delete('/:id', (request, response, next) => {
   Blog.findByIdAndDelete(request.params.id)

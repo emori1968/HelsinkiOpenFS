@@ -81,7 +81,7 @@ test('a valid blog can be added ', async () => {
     
   })
 
-  test.only('a blog without likes are defaulted to cero', async () => {
+  test('a blog without likes are defaulted to cero', async () => {
     const newBlog = {
       title: 'Defaulting values for request',
       author: 'edu edu',
@@ -94,11 +94,22 @@ test('a valid blog can be added ', async () => {
       .expect('Content-Type', /application\/json/)
   
     const response = await api.get('/api/blogs')
-    // Find added blog and check if likes ae cero
+
     const likes = response.body[2].likes
-    // const myblog = contents.map
+
     console.log("MyBlog", likes)
     assert.strictEqual(likes, 0)
+  })
+
+  test('missing title or url tests', async () => {
+    const newBlog = {
+      author: 'eduardo daniel',
+      likes:12
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
   })
 
 after(async () => {
