@@ -1,6 +1,7 @@
 const { test, after, beforeEach } = require('node:test')
-const Blog = require('../models/blog')
 const mongoose = require('mongoose')
+const Blog = require('../models/blog')
+
 const supertest = require('supertest')
 const app = require('../app')
 var assert = require('assert')
@@ -51,6 +52,36 @@ test('the first blog is about React patterns', async () => {
     assert(contents.includes("React patterns"))
   })
 
+test('the blog identifier is "id" ', async () => {
+
+    const response = await api.get('/api/blogs')
+    const keys = Object.keys(response.body[0])
+    assert(keys.includes('id'))
+  })
+
+test('a valid blog can be added ', async () => {
+    const newBlog = {
+      title: 'async/await simplifies making async calls',
+      author: 'el edu',
+      url: 'http://www.diegomaradona.com',
+      likes: 1000,
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const response = await api.get('/api/blogs')
+    const contents = response.body.map(r => r.title)
+    assert.strictEqual(response.body.length, initialBlogs.length + 1)
+    assert(contents.includes('async/await simplifies making async calls'))
+    
+  })
+
 after(async () => {
     await mongoose.connection.close()
   })
+
+
