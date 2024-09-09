@@ -11,7 +11,8 @@ blogsRouter.get('/', (request, response) => {
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({})
   response.json(blogs)
-  })
+  }
+)
 
 
 blogsRouter.get('/:id', (request, response, next) => {
@@ -28,12 +29,17 @@ blogsRouter.get('/:id', (request, response, next) => {
 
 blogsRouter.post('/', (request, response, next) => {
   const body = request.body
+  let likes = 0
+
+  if(body.likes != undefined) {
+    likes = body.likes
+  }
 
   const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: likes
   })
 
   blog.save()
@@ -53,12 +59,17 @@ blogsRouter.delete('/:id', (request, response, next) => {
 
 blogsRouter.put('/:id', (request, response, next) => {
   const body = request.body
+  let likes = 0
+
+  if(body.likes != undefined) {
+    likes = body.likes
+  }
 
   const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: likes
   })
 
   Blog.findByIdAndUpdate(request.params.id, blog, { new: true })

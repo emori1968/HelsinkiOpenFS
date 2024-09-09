@@ -56,6 +56,7 @@ test('the blog identifier is "id" ', async () => {
 
     const response = await api.get('/api/blogs')
     const keys = Object.keys(response.body[0])
+    console.log("Keys: ", keys)
     assert(keys.includes('id'))
   })
 
@@ -80,8 +81,27 @@ test('a valid blog can be added ', async () => {
     
   })
 
+  test.only('a blog without likes are defaulted to cero', async () => {
+    const newBlog = {
+      title: 'Defaulting values for request',
+      author: 'edu edu',
+      url: 'http://www.queen.com',
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const response = await api.get('/api/blogs')
+    // Find added blog and check if likes ae cero
+    const likes = response.body[2].likes
+    // const myblog = contents.map
+    console.log("MyBlog", likes)
+    assert.strictEqual(likes, 0)
+  })
+
 after(async () => {
     await mongoose.connection.close()
   })
-
 
