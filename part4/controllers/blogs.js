@@ -42,7 +42,8 @@ blogsRouter.post('/', (request, response, next) => {
     likes: likes
   })
 
-  if (body.title != undefined && body.url != undefined) {
+  // try-catch elimination pending
+  if (body.title != undefined || body.url != undefined) {
     blog.save()
     .then(savedBlog => {
       response.status(201).json(savedBlog)
@@ -54,8 +55,6 @@ blogsRouter.post('/', (request, response, next) => {
 
   })
 
-  
-
 blogsRouter.delete('/:id', (request, response, next) => {
   Blog.findByIdAndDelete(request.params.id)
     .then(() => {
@@ -64,26 +63,18 @@ blogsRouter.delete('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-blogsRouter.put('/:id', (request, response, next) => {
+blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
-  let likes = 0
 
-  if(body.likes != undefined) {
-    likes = body.likes
+  const blog = {
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes
   }
 
-  const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: likes
-  })
-
-  Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-    .then(updatedBlog => {
-      response.json(updatedBlog)
-    })
-    .catch(error => next(error))
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  response.status(200).json(updatedBlog)
 })
 
 module.exports = blogsRouter
