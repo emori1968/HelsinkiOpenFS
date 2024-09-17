@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 content-type: application/json
-authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphY2ludG8iLCJpZCI6IjY2ZTMyMjM0NWFlYzM1MDRiNGE4ZmRiNiIsImlhdCI6MTcyNjE2MjI3NCwiZXhwIjoxNzI2MTY1ODc0fQ.6Dw9aNNFj3oWIMi_hFGClaII76PA3EBL8yuJnZOSoiQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlZlcm9uaWNhIiwiaWQiOiI2NmU5ZGNjMmI5YzRlN2E0ZDU4Y2EwZTciLCJpYXQiOjE3MjY2MDI1MzUsImV4cCI6MTcyNjYwNjEzNX0.S06MW7flGSVB4K61JCWgWMRIIMazVIAuEm7YUUgQihQ
 
 {
-    "title": "Blog jacinto",
-    "author": "Blog author66",
-    "url": "Blog aouthor66",
-    "likes": 326
+    "title": "Quesos para la famila",
+    "author": "La tia de Veronica",
+    "url": "www.verovero.com",
+    "likes": 200
 }
