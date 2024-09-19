@@ -1,18 +1,8 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
-
-const Notification = ({ message }) => {
-  if (message === null) {
-    return null
-  }
-  return (
-    <div className="confirm">
-      {message}
-    </div>
-  )
-}
 
 const App = () => {
 
@@ -24,6 +14,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user,setUser] = useState(null)
+  const [confirmMessage, setConfirmMessage] = useState(null)
 
 
   useEffect(() => {
@@ -47,14 +38,14 @@ const App = () => {
         const user = await loginService.login({ username, password })
         blogService.setToken(user.token)
         console.log("Token", user.token)
-        window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user)) 
+        window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+        console.log("User", user)
         setUser(user)
         setUsername('')
         setPassword('')
-    } catch (exception) {
-         setErrorMessage('Wrong credentials')
-         setTimeout(() => {
-            setErrorMessage(null)      }, 5000)
+    } catch (exeption) {
+         setErrorMessage('Wrong username or password')
+         setTimeout( () => {setErrorMessage(null)}, 5000)
       }
     }
 
@@ -76,6 +67,8 @@ const App = () => {
         .create(blogObject)
           .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
+          setConfirmMessage(`${newTitle} from ${newAuthor} was added`)
+          setTimeout(() => {setConfirmMessage(null)}, 5000)
           setNewTitle('')
           setNewAuthor('')
           setNewURL('')
@@ -165,7 +158,7 @@ const App = () => {
       <h2>blogs</h2>
       <>{user.username} logged-in</>
       <button onClick={handleLogout}> logout </button>
-      <Notification message={errorMessage} />
+      <Notification message={confirmMessage} />
       {blogForm()}
       {blogsToShow.map(blog =>
         <Blog key={blog.id} blog={blog} />
