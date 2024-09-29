@@ -3,7 +3,7 @@ import blogService from '../services/blogs'
 
 
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog }, {username}) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -32,8 +32,9 @@ const Blog = ({ blog }) => {
           {blog.title}
           <Togglable buttonLabel= 'view'>
             {blog.url}<br/>
-            Likes: {blog.likes} <button onClick={likeshandler} >like</button>  <br/>
             {blog.author} <br/>
+            Likes: {blog.likes} <button onClick={likeshandler} >like</button>  <br/>
+            {username}
           </Togglable>
       </div>
     </div>

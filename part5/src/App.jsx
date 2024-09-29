@@ -89,9 +89,12 @@ const App = () => {
     )
   }
  
-  const blogsToShow = (user === null)
+  let blogsToShow = (user === null)
     ? [{}]
     : blogs.filter((c) => c.user.username == user.username)
+
+  blogsToShow = blogsToShow.sort((a, b) => b.likes - a.likes);
+  console.log(blogsToShow);
 
   
 return (
@@ -114,6 +117,7 @@ return (
         <Blog
           key={blog.id}
           blog={blog}
+          username= {username}
         />
       )}
     </ul>
