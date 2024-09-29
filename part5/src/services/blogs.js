@@ -9,6 +9,7 @@ const setToken = (newToken) => {
 
 const getAll = () => {
   const request = axios.get(baseUrl)
+  console.log("getall request", request)
   return request.then(response => response.data)
 }
 
@@ -18,12 +19,12 @@ const create = async (newObject) => {
   }
   //console.log("Headers", config)
   const response = await axios.post(baseUrl,newObject,config)
-  console.log("Response", response.data)
+  // console.log("Response", response.data)
   return response.data
 }
 
 const update = (id, newObject) => {
-  const request = axios.put('${baseUrl}/${id}', newObject)
+  const request = axios.put(`${ baseUrl }/${id}`, newObject)
   return request.then(response => response.data)
 }
 
