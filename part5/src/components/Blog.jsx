@@ -26,6 +26,14 @@ const Blog = ({ blog }, {username}) => {
       .update(blog.id, objectBlog)
     }
 
+  const deletehandler = (event) => {
+    const flag = window.confirm(`remove blog: ${blog.title} by ${blog.author}`)
+    if (flag) {
+      blogService
+      .deleteBlog(blog.id)
+    }
+  }
+
   return(
     <div style={blogStyle}>
       <div>
@@ -34,7 +42,8 @@ const Blog = ({ blog }, {username}) => {
             {blog.url}<br/>
             {blog.author} <br/>
             Likes: {blog.likes} <button onClick={likeshandler} >like</button>  <br/>
-            {username}
+            User: {username} <br/>
+            <button onClick={deletehandler} >remove</button>  <br/>
           </Togglable>
       </div>
     </div>
