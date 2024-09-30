@@ -9,13 +9,13 @@ const setToken = (newToken) => {
 
 const getAll = () => {
   const request = axios.get(baseUrl)
-  console.log("getall request", request)
+  console.log('getall request', request)
   return request.then(response => response.data)
 }
 
 const create = async (newObject) => {
   const config = {
-    headers: { Authorization: token},
+    headers: { Authorization: token },
   }
   //console.log("Headers", config)
   const response = await axios.post(baseUrl,newObject,config)

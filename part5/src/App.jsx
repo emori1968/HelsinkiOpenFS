@@ -21,10 +21,10 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
-  useEffect(() => {
+  useEffect( () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -33,22 +33,22 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => { 
+  const handleLogin = async (event) => {
     event.preventDefault()
     try {
-        const user = await loginService.login({ username, password })
-        blogService.setToken(user.token)
-        //console.log("Token", user.token)
-        window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-        // console.log("User", user)
-        setUser(user)
-        setUsername('')
-        setPassword('')
+      const user = await loginService.login({ username, password })
+      blogService.setToken(user.token)
+      //console.log("Token", user.token)
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+      // console.log("User", user)
+      setUser(user)
+      setUsername('')
+      setPassword('')
     } catch (exeption) {
-         setErrorMessage('Wrong username or password')
-         setTimeout( () => {setErrorMessage(null)}, 5000)
-      }
+      setErrorMessage('Wrong username or password')
+      setTimeout( () => {setErrorMessage(null)}, 5000)
     }
+  }
 
   const handleLogout = (event) => {
     window.localStorage.removeItem('loggedBlogappUser')
@@ -58,13 +58,12 @@ const App = () => {
   }
 
   const addBlog = (blogObject) => {
-      blogService
-        .create(blogObject)
-          .then(returnedBlog => {
-          setBlogs(blogs.concat(returnedBlog))
-  
-        })
-    }
+    blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+      })
+  }
 
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
@@ -88,41 +87,41 @@ const App = () => {
       </div>
     )
   }
- 
+
   let blogsToShow = (user === null)
     ? [{}]
-    : blogs.filter((c) => c.user.username == user.username)
+    : blogs.filter((c) => c.user.username === user.username)
 
-  blogsToShow = blogsToShow.sort((a, b) => b.likes - a.likes);
-  console.log(blogsToShow);
+  blogsToShow = blogsToShow.sort((a, b) => b.likes - a.likes)
+  console.log(blogsToShow)
 
-  
-return (
-  <div>
-    <h1>Blogs</h1>
-    <Notification message={errorMessage} />
-    {!user && loginForm()}
-    {user && <div>
-                <p>{user.name} logged in</p>
-                <button onClick={handleLogout}> logout </button>
-                <Togglable buttonLabel="new blog">
-                  <BlogForm
-                    createBlog={addBlog}
-                  />
-                </Togglable>
-              </div>
-    }
-    <ul>
-      {blogsToShow.map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          username= {username}
-        />
-      )}
-    </ul>
-  </div>
-)
+
+  return (
+    <div>
+      <h1>Blogs</h1>
+      <Notification message={errorMessage} />
+      {!user && loginForm()}
+      {user && <div>
+        <p>{user.name} logged in</p>
+        <button onClick={handleLogout}> logout </button>
+        <Togglable buttonLabel="new blog">
+          <BlogForm
+            createBlog={addBlog}
+          />
+        </Togglable>
+      </div>
+      }
+      <ul>
+        {blogsToShow.map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            username= {username}
+          />
+        )}
+      </ul>
+    </div>
+  )
 }
 
 
