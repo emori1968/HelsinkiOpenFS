@@ -1,7 +1,16 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 
 describe('Blog app', () => {
-  beforeEach(async ({ page }) => {
+  beforeEach(async ({ page, request }) => {
+    await request.post('http://localhost:3003/api/testing/reset')
+    await request.post('http://localhost:3003/api/users', {
+      data: {
+        name: 'vergara',
+        username: 'jacinto',
+        password: 'ramos'
+      }
+    })
+
     await page.goto('http://localhost:5173')
   })
 
@@ -9,4 +18,23 @@ describe('Blog app', () => {
     await expect(page.getByText('Blogs')).toBeVisible()
     await expect(page.getByText('log in')).toBeVisible()
   })
-})
+
+  describe('Login', () => {
+    test('succeeds with correct credentials', async ({ page }) => {
+        await page.goto('http://localhost:5173')
+        await page.getByRole('button', { name: 'log in' }).click()
+        await page.getByRole('textbox').first().fill('jacinto')
+        await page.getByRole('textbox').last().fill('ramos')
+        await page.getByRole('button', { name: 'login' }).click()
+        await expect(page.getByText('vergara logged in')).toBeVisible()  })
+
+    test('fails with wrong credentials', async ({ page }) => {
+        await page.goto('http://localhost:5173')
+        await page.getByRole('button', { name: 'log in' }).click()
+        await page.getByRole('textbox').first().fill('jacinto')
+        await page.getByRole('textbox').last().fill('ramos')
+        await page.getByRole('button', { name: 'login' }).click()
+        await expect(page.getByText('username')).toBeVisible()  })
+    })
+
+  })
